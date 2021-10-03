@@ -5,7 +5,7 @@ import routes from "./routes";
 const app = express();
 require("dotenv").config();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.BD as string);
 app.use(cors());
