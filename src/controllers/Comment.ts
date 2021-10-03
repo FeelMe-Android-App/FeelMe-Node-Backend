@@ -50,7 +50,8 @@ export const getMovieComments = async (req: Request, res: Response) => {
     const comments = Comment.find({ uid: { $in: userFriends }, deleted: false })
       .skip(pageSkip)
       .limit(20);
-    if (!comments) return res.status(200).json([]);
+    if (!comments)
+      return res.status(422).json({ error: "No more itens to show" });
     return res.status(200).json(comments);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
@@ -79,7 +80,8 @@ export const getUserComments = async (req: Request, res: Response) => {
     const comments = await Comment.find({ uid: userProfile })
       .skip(pageSkip)
       .limit(20);
-    if (!comments) res.status(200).json([]);
+    if (!comments)
+      return res.status(422).json({ error: "No more itens to show" });
     res.status(200).json(comments);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
@@ -99,7 +101,8 @@ export const getFriendsComments = async (req: Request, res: Response) => {
     const friendsComments = await Comment.find({ uid: { $in: user.follow } })
       .skip(pageSkip)
       .limit(20);
-    if (!friendsComments) res.status(200).json([]);
+    if (!friendsComments)
+      return res.status(422).json({ error: "No more itens to show" });
     res.status(200).json(friendsComments);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });

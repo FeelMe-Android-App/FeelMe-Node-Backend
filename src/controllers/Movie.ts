@@ -17,7 +17,8 @@ export const getUnwatchedMovieList = async (req: Request, res: Response) => {
     const movieList = await Movie.find({ uid: user._id, watched: false })
       .skip(pageSkip)
       .limit(20);
-    if (!movieList) return res.status(200).json([]);
+    if (!movieList)
+      return res.status(422).json({ error: "No more itens to show" });
     return res.status(200).json(movieList);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
@@ -37,7 +38,8 @@ export const getWatchedMovieList = async (req: Request, res: Response) => {
     const movieList = await Movie.find({ uid: user._id, watched: true })
       .skip(pageSkip)
       .limit(20);
-    if (!movieList) return res.status(200).json([]);
+    if (!movieList)
+      return res.status(422).json({ error: "No more itens to show" });
     return res.status(200).json(movieList);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
@@ -68,7 +70,8 @@ export const getUserUnWatchedMovieList = async (
     const movieList = await Movie.find({ uid: user._id, watched: false })
       .skip(pageSkip)
       .limit(20);
-    if (!movieList) return res.status(200).json([]);
+    if (!movieList)
+      return res.status(422).json({ error: "No more itens to show" });
     return res.status(200).json(movieList);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
@@ -96,7 +99,8 @@ export const getUserWatchedMovieList = async (req: Request, res: Response) => {
     const movieList = await Movie.find({ uid: user._id, watched: true })
       .skip(pageSkip)
       .limit(20);
-    if (!movieList) return res.status(200).json([]);
+    if (!movieList)
+      return res.status(422).json({ error: "No more itens to show" });
     return res.status(200).json(movieList);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
