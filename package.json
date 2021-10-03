@@ -1,0 +1,32 @@
+{
+  "name": "feelme-back",
+  "version": "1.0.0",
+  "description": "Backend for FeelMe Android App",
+  "main": "src/app.ts",
+  "author": "Paulo <paulo.wueliton@hotmail.com>",
+  "license": "MIT",
+  "types": "types/index.d.ts",
+  "files": [
+    "src",
+    "types"
+  ],
+  "scripts": {
+    "start": "nodemon --watch src src/app.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^9.12.0",
+    "mongoose": "^6.0.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^16.10.2",
+    "nodemon": "^2.0.13",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
