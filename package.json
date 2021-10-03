@@ -11,7 +11,8 @@
     "types"
   ],
   "scripts": {
-    "start": "nodemon --watch src src/app.ts"
+    "start": "nodemon --watch src src/app.ts",
+    "build": "yarn build"
   },
   "dependencies": {
     "cors": "^2.8.5",
