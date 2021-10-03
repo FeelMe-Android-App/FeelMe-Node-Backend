@@ -24,7 +24,7 @@ export const getMyComments = async (req: Request, res: Response) => {
     })
       .skip(pageSkip)
       .limit(20);
-    if (!comments)
+    if (!comments || comments.length === 0)
       return res.status(404).json({ error: "No comments founded" });
 
     return res.status(200).json(comments);
@@ -47,10 +47,14 @@ export const getMovieComments = async (req: Request, res: Response) => {
     if (!userFriends || userFriends.length === 0)
       return res.status(404).json({ error: "User do not have friends" });
 
-    const comments = Comment.find({ uid: { $in: userFriends }, deleted: false })
+    const comments = await Comment.find({
+      uid: { $in: userFriends },
+      deleted: false,
+    })
       .skip(pageSkip)
       .limit(20);
-    if (!comments)
+
+    if (!comments || comments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
     return res.status(200).json(comments);
   } catch (err) {
@@ -80,7 +84,7 @@ export const getUserComments = async (req: Request, res: Response) => {
     const comments = await Comment.find({ uid: userProfile })
       .skip(pageSkip)
       .limit(20);
-    if (!comments)
+    if (!comments || comments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
     res.status(200).json(comments);
   } catch (err) {
@@ -101,7 +105,7 @@ export const getFriendsComments = async (req: Request, res: Response) => {
     const friendsComments = await Comment.find({ uid: { $in: user.follow } })
       .skip(pageSkip)
       .limit(20);
-    if (!friendsComments)
+    if (!friendsComments || friendsComments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
     res.status(200).json(friendsComments);
   } catch (err) {
