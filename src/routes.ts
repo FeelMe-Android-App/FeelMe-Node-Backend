@@ -31,6 +31,8 @@ import {
   deleteUserProfile,
   followUser,
   unfollowUser,
+  getFollow,
+  getFollowed,
 } from "./controllers/User";
 import firebaseAuth from "./middleware/auth";
 const routes = express.Router();
@@ -38,6 +40,10 @@ const routes = express.Router();
 routes.get("/myprofile", firebaseAuth, getUserProfile);
 routes.patch("/myprofile", firebaseAuth, updateUserProfile);
 routes.delete("/myprofile", firebaseAuth, deleteUserProfile);
+routes.get("/myprofile/follow", firebaseAuth, getFollow);
+routes.get("/myprofile/followed", firebaseAuth, getFollowed);
+routes.get("/myprofile/unwatchedmovies", firebaseAuth, getUnwatchedMovieList);
+routes.get("/myprofile/watchedmovies", firebaseAuth, getWatchedMovieList);
 routes.post("/user", firebaseAuth, saveUserProfile);
 routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);
@@ -50,8 +56,6 @@ routes.post("/comment/:movieId", firebaseAuth, createComment);
 routes.delete("/comment/:commentId", firebaseAuth, deleteUserComment);
 routes.put("/comment/:commentId", firebaseAuth, editUserComment);
 
-routes.get("/unwatchedmovies", firebaseAuth, getUnwatchedMovieList);
-routes.get("/watchedmovies", firebaseAuth, getWatchedMovieList);
 routes.get(
   "/user/:userId/unwatchedmovies",
   firebaseAuth,

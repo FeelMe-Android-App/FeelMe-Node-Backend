@@ -14,7 +14,7 @@ export const getUnwatchedMovieList = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const movieList = await Movie.find({ uid: userUid, watched: false })
+    const movieList = await Movie.find({ uid: user._id, watched: false })
       .skip(pageSkip)
       .limit(20);
     if (!movieList) return res.status(200).json([]);
@@ -34,7 +34,7 @@ export const getWatchedMovieList = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const movieList = await Movie.find({ uid: userUid, watched: true })
+    const movieList = await Movie.find({ uid: user._id, watched: true })
       .skip(pageSkip)
       .limit(20);
     if (!movieList) return res.status(200).json([]);
@@ -60,12 +60,12 @@ export const getUserUnWatchedMovieList = async (
 
     const userData = await User.findOne({
       uid: userProfileId,
-      followed: { $in: userUid },
+      followed: { $in: user._id },
       deleted: false,
     });
     if (!userData) return res.status(404).json({ error: "User not founded" });
 
-    const movieList = await Movie.find({ uid: userProfileId, watched: false })
+    const movieList = await Movie.find({ uid: user._id, watched: false })
       .skip(pageSkip)
       .limit(20);
     if (!movieList) return res.status(200).json([]);
@@ -90,10 +90,10 @@ export const getUserWatchedMovieList = async (req: Request, res: Response) => {
     });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const userData = await User.findOne({ uid: userProfileId, deleted: false });
+    const userData = await User.findOne({ uid: user._id, deleted: false });
     if (!userData) return res.status(404).json({ error: "User not founded" });
 
-    const movieList = await Movie.find({ uid: userProfileId, watched: true })
+    const movieList = await Movie.find({ uid: user._id, watched: true })
       .skip(pageSkip)
       .limit(20);
     if (!movieList) return res.status(200).json([]);
@@ -121,7 +121,7 @@ export const saveUnwatchedMovieToList = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Movie already exists" });
 
     const newMovie: IMovie = {
-      uid: userUid,
+      uid: user._id,
       id: movieId,
       title,
       backdropPath,
@@ -150,11 +150,11 @@ export const saveWatchedMovieToList = async (req: Request, res: Response) => {
     if (movieDetails) {
       movieDetails.watched = true;
       movieDetails.save();
-      res.status(200).json(movieDetails);
+      return res.status(200).json(movieDetails);
     }
 
     const newMovie: IMovie = {
-      uid: userUid,
+      uid: user._id,
       id: movieId,
       title,
       backdropPath,
@@ -178,7 +178,7 @@ export const removeMovieFromListWatched = async (
   const movieId = req.params.movieId;
 
   try {
-    const user = await User.findOne({ uid: userUid, deleted: true });
+    const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const movieDetails = await Movie.findOne({ id: movieId });
@@ -198,14 +198,14 @@ export const removeMovieFromList = async (req: Request, res: Response) => {
   const movieId = req.params.movieId;
 
   try {
-    const user = await User.findOne({ uid: userUid, deleted: true });
+    const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const movieDetails = await Movie.findOne({ id: movieId });
     if (!movieDetails)
       return res.status(404).json({ error: "Movie not founded" });
 
-    movieDetails.delete();
+    movieDetails.remove();
     return res.status(204).send();
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });

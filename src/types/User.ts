@@ -4,7 +4,9 @@ export interface IUser {
   email: string;
   photoUrl: string;
   follow: string[];
+  followCount?: number;
   followed: string[];
+  followedCount?: number;
   deleted: boolean;
   streaming?: number[];
   createdAt: Date;

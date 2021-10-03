@@ -10,11 +10,21 @@ export const getUserProfile = async (req: Request, res: Response) => {
     const userId = await User.findOne({
       uid: userUid,
       deleted: false,
-    }).populate("follow followed", "name photoUrl uid");
+    });
 
     if (!userId) res.status(404).json({ error: "User not founded" });
 
-    res.status(200).json(userId);
+    const userData = {
+      _id: userId._id,
+      uid: userId.uid,
+      name: userId.name,
+      email: userId.email,
+      photoUrl: userId.photoUrl,
+      followCount: userId.follow.length,
+      followedCount: userId.followed.length,
+    };
+
+    res.status(200).json(userData);
   } catch (err) {
     res.status(404).json({ error: "User not found" });
   }
@@ -57,6 +67,42 @@ export const deleteUserProfile = async (req: Request, res: Response) => {
 
     await userData.save();
     return res.status(204).send();
+  } catch (err) {
+    return res.status(500).json({
+      error: "Error, please try again",
+    });
+  }
+};
+
+export const getFollow = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+
+  try {
+    const userData = await User.findOne({ uid: userUid, deleted: false })
+      .populate("follow", "name photoUrl uid")
+      .select("follow");
+
+    if (!userData) return res.status(404).json({ error: "User not found" });
+
+    res.status(200).send(userData);
+  } catch (err) {
+    return res.status(500).json({
+      error: "Error, please try again",
+    });
+  }
+};
+
+export const getFollowed = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+
+  try {
+    const userData = await User.findOne({ uid: userUid, deleted: false })
+      .populate("followed", "name photoUrl uid")
+      .select("followed");
+
+    if (!userData) return res.status(404).json({ error: "User not found" });
+
+    res.status(200).send(userData);
   } catch (err) {
     return res.status(500).json({
       error: "Error, please try again",
