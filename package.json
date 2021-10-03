@@ -12,7 +12,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/app.ts"
+    "start": "ts-node src/app.ts",
+    "heroku-prebuild": "npm i -f",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "cors": "^2.8.5",
