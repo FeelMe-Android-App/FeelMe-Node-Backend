@@ -129,8 +129,13 @@ export const saveUserProfile = async (req: Request, res: Response) => {
     const userExists = await User.findOne({ uid: user.uid });
 
     if (userExists) {
-      if (!userExists.deleted)
-        return res.status(409).send({ error: "User already exists" });
+      if (!userExists.deleted) {
+        (userExists.name = user.name),
+          (userExists.email = user.email),
+          (userExists.photoUrl = user.photoUrl ?? ""),
+          userExists.save();
+        return res.status(200).send(userExists);
+      }
 
       userExists.deleted = false;
       await userExists.save();
