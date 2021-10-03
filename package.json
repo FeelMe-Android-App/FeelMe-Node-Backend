@@ -5,16 +5,9 @@
   "main": "src/app.ts",
   "author": "Paulo <paulo.wueliton@hotmail.com>",
   "license": "MIT",
-  "types": "types/index.d.ts",
-  "files": [
-    "src",
-    "types"
-  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/app.ts",
-    "heroku-prebuild": "npm i -f",
-    "heroku-postbuild": "npm run build"
+    "start": "ts-node src/app.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
