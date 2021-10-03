@@ -11,8 +11,7 @@
     "types"
   ],
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/app.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
