@@ -11,7 +11,8 @@
     "types"
   ],
   "scripts": {
-    "start": "nodemon --watch src src/app.ts"
+    "start": "nodemon --watch src src/app.ts",
+    "test": "(eslint lib || true) && jest"
   },
   "dependencies": {
     "cors": "^2.8.5",
