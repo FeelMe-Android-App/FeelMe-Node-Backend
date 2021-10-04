@@ -18,7 +18,7 @@ export const getUnwatchedMovieList = async (req: Request, res: Response) => {
       .limit(20);
     if (!movieList || movieList.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    return res.status(200).json(movieList);
+    return res.status(200).json({ unwatched: movieList });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
@@ -39,7 +39,7 @@ export const getWatchedMovieList = async (req: Request, res: Response) => {
       .limit(20);
     if (!movieList || movieList.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    return res.status(200).json(movieList);
+    return res.status(200).json({ watched: movieList });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
