@@ -14,6 +14,7 @@ export const getUnwatchedMovieList = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const movieList = await Movie.find({ uid: user._id, watched: false })
+      .sort({ updatedAt: -1 })
       .select("id title backdropPath")
       .skip(pageSkip)
       .limit(20);
@@ -36,6 +37,7 @@ export const getWatchedMovieList = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const movieList = await Movie.find({ uid: user._id, watched: true })
+      .sort({ updatedAt: -1 })
       .select("id title backdropPath")
       .skip(pageSkip)
       .limit(20);
@@ -69,6 +71,7 @@ export const getUserUnWatchedMovieList = async (
     if (!userData) return res.status(404).json({ error: "User not founded" });
 
     const movieList = await Movie.find({ uid: user._id, watched: false })
+      .sort({ updatedAt: -1 })
       .select("id title backdropPath")
       .skip(pageSkip)
       .limit(20);
@@ -99,6 +102,7 @@ export const getUserWatchedMovieList = async (req: Request, res: Response) => {
     if (!userData) return res.status(404).json({ error: "User not founded" });
 
     const movieList = await Movie.find({ uid: user._id, watched: true })
+      .sort({ updatedAt: -1 })
       .select("id title backdropPath")
       .skip(pageSkip)
       .limit(20);
