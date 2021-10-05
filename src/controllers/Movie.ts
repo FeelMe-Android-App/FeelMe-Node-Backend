@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/User";
 import { Movie } from "../models/Movie";
 import { IMovie } from "../types/Movie";
+import { Comment } from "../models/Comment";
 
 export const getUnwatchedMovieList = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
@@ -212,12 +213,30 @@ export const removeMovieFromList = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const movieDetails = await Movie.findOne({ id: movieId });
+    const movieDetails = await Movie.findOne({ id: movieId, uid: user.id });
     if (!movieDetails)
       return res.status(404).json({ error: "Movie not founded" });
 
     movieDetails.remove();
     return res.status(204).send();
+  } catch (err) {
+    res.status(404).json({ error: "Error, please try again" });
+  }
+};
+
+export const movieDetails = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+  const movieId = req.params.movieId;
+
+  try {
+    const user = await User.findOne({ uid: userUid, deleted: false });
+    if (!user) return res.status(404).json({ error: "User not founded" });
+
+    const movieDetails = await Movie.findOne({ id: movieId, uid: user.id });
+    if (!movieDetails) return res.json({ movieStatus: "" });
+    return movieDetails.watched
+      ? res.json({ movieDetails: "watched" })
+      : res.json({ movieDetails: "saved" });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
