@@ -63,7 +63,7 @@ routes.get(
   getUserUnWatchedMovieList
 );
 routes.get("/user/:userId/watchedmovie", firebaseAuth, getUserWatchedMovieList);
-routes.post("/movie/:movieId", firebaseAuth, movieDetails);
+routes.get("/movie/:movieId", firebaseAuth, movieDetails);
 routes.post("/movie/:movieId/add", firebaseAuth, saveUnwatchedMovieToList);
 routes.post("/movie/:movieId/watched", firebaseAuth, saveWatchedMovieToList);
 routes.delete(
