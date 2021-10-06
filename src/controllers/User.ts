@@ -244,3 +244,24 @@ export const unfollowUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const saveUserStreaming = async (req: Request, res: Response) => {
+  const userId = res.locals.user.uid;
+  const { streamings } = req.body;
+
+  if (!streamings)
+    return res.status(422).json({ error: "Stream list is required" });
+
+  try {
+    const userExists = await User.findOne({ uid: userId, deleted: false });
+    if (!userExists) return res.status(404).json({ error: "User not found" });
+
+    userExists.streaming = streamings;
+    userExists.save();
+    return res.status(200).json(userExists);
+  } catch (err) {
+    return res.status(500).json({
+      error: "Error, please try again",
+    });
+  }
+};

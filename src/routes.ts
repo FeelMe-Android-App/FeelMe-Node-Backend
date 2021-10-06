@@ -34,6 +34,7 @@ import {
   unfollowUser,
   getFollow,
   getFollowed,
+  saveUserStreaming,
 } from "./controllers/User";
 import firebaseAuth from "./middleware/auth";
 const routes = express.Router();
@@ -77,5 +78,7 @@ routes.post("/feeling/:feelingId/:movieId/vote", firebaseAuth, voteFeeling);
 routes.get("/feeling", getFeeling);
 routes.post("/feeling", saveFeeling);
 routes.put("/feeling/:feelingId", updateFeeling);
+
+routes.post("/user/streamings", firebaseAuth, saveUserStreaming);
 
 export default routes;
