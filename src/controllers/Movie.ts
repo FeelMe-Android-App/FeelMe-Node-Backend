@@ -128,7 +128,7 @@ export const saveUnwatchedMovieToList = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const movieDetails = await Movie.findOne({ id: movieId });
+    const movieDetails = await Movie.findOne({ id: movieId, uid: user.id });
     if (movieDetails)
       return res.status(404).json({ error: "Movie already exists" });
 
@@ -158,7 +158,7 @@ export const saveWatchedMovieToList = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
-    const movieDetails = await Movie.findOne({ id: movieId });
+    const movieDetails = await Movie.findOne({ id: movieId, uid: user.id });
     if (movieDetails) {
       movieDetails.watched = true;
       movieDetails.save();
@@ -193,7 +193,7 @@ export const removeMovieFromListWatched = async (
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const movieDetails = await Movie.findOne({ id: movieId });
+    const movieDetails = await Movie.findOne({ id: movieId, uid: user.id });
     if (!movieDetails)
       return res.status(404).json({ error: "Movie not founded" });
 
