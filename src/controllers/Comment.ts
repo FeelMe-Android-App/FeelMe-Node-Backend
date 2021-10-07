@@ -52,7 +52,7 @@ export const getMovieComments = async (req: Request, res: Response) => {
       uid: { $in: userFriends },
       deleted: false,
     })
-      .populate("uid", "name photoUrl")
+      .populate("uid", "name photoUrl uid")
       .sort({ updatedAt: -1 })
       .skip(pageSkip)
       .limit(20);
