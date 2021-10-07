@@ -56,7 +56,7 @@ export const getMovieComments = async (req: Request, res: Response) => {
 
     if (!comments || comments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    return res.status(200).json(comments);
+    return res.status(200).json({ comments: comments });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
@@ -86,7 +86,7 @@ export const getUserComments = async (req: Request, res: Response) => {
       .limit(20);
     if (!comments || comments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    res.status(200).json(comments);
+    res.status(200).json({ comments: comments });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
@@ -107,7 +107,7 @@ export const getFriendsComments = async (req: Request, res: Response) => {
       .limit(20);
     if (!friendsComments || friendsComments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    res.status(200).json(friendsComments);
+    res.status(200).json({ comments: friendsComments });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
@@ -138,7 +138,7 @@ export const createComment = async (req: Request, res: Response) => {
     };
 
     const commentResult = await Comment.create(commentData);
-    return res.status(201).json(commentResult);
+    return res.status(201).json({ comments: commentResult });
   } catch (err) {
     res.status(404).json({ error: err });
   }
