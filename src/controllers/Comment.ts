@@ -51,6 +51,7 @@ export const getMovieComments = async (req: Request, res: Response) => {
       uid: { $in: [...userFriends, user._id] },
       deleted: false,
     })
+      .populate("userId", "name photoUrl uid")
       .skip(pageSkip)
       .limit(20);
 
