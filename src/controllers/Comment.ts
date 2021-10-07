@@ -48,7 +48,7 @@ export const getMovieComments = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "User do not have friends" });
 
     const comments = await Comment.find({
-      uid: { $in: userFriends },
+      uid: { $in: [...userFriends, user._id] },
       deleted: false,
     })
       .skip(pageSkip)
