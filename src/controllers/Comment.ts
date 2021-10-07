@@ -43,21 +43,23 @@ export const getMovieComments = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const userFriends = user.followed;
-    if (!userFriends || userFriends.length === 0)
+    if (!user.follow || user.follow.length === 0)
       return res.status(404).json({ error: "User do not have friends" });
+
+    const userFriends = [...user.follow, user._id];
 
     const comments = await Comment.find({
       uid: { $in: userFriends },
       deleted: false,
     })
-      .populate("userId", "name photoUrl uid")
+      .populate("uid", "name photoUrl")
+      .sort({ updatedAt: -1 })
       .skip(pageSkip)
       .limit(20);
 
     if (!comments || comments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    return res.status(200).json({ comments: comments });
+    return res.status(200).json(comments);
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
@@ -83,6 +85,7 @@ export const getUserComments = async (req: Request, res: Response) => {
       res.status(404).json({ error: "User profile not founded" });
 
     const comments = await Comment.find({ uid: userProfile })
+      .sort({ updatedAt: -1 })
       .skip(pageSkip)
       .limit(20);
     if (!comments || comments.length === 0)
@@ -104,6 +107,7 @@ export const getFriendsComments = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const friendsComments = await Comment.find({ uid: { $in: user.follow } })
+      .sort({ updatedAt: -1 })
       .skip(pageSkip)
       .limit(20);
     if (!friendsComments || friendsComments.length === 0)
