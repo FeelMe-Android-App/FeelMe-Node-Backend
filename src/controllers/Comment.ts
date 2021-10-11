@@ -43,10 +43,10 @@ export const getMovieComments = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    if (!user.follow || user.follow.length === 0)
-      return res.status(404).json({ error: "User do not have friends" });
-
-    const userFriends = [...user.follow, user._id];
+    const userFriends =
+      !user.follow || user.follow.length === 0
+        ? [...user.follow, user._id]
+        : [user._id];
 
     const comments = await Comment.find({
       uid: { $in: userFriends },
