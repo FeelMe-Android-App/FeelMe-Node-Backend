@@ -59,7 +59,7 @@ export const getMovieComments = async (req: Request, res: Response) => {
 
     if (!comments || comments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
-    return res.status(200).json(comments);
+    return res.status(200).json({ comments: comments });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }
