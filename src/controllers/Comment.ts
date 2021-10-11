@@ -35,9 +35,12 @@ export const getMyComments = async (req: Request, res: Response) => {
 
 export const getMovieComments = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
+  const movieId = parseInt(req.params.movieId);
   let page = req.query.page;
   let pageSkip = page ? parseInt(page.toString()) : 1;
   pageSkip = (pageSkip - 1) * 20;
+
+  if (!movieId) return res.status(404).json({ error: "movieId is required." });
 
   try {
     const user = await User.findOne({ uid: userUid, deleted: false });
@@ -50,6 +53,7 @@ export const getMovieComments = async (req: Request, res: Response) => {
 
     const comments = await Comment.find({
       uid: { $in: userFriends },
+      movieId,
       deleted: false,
     })
       .populate("uid", "name photoUrl uid")
