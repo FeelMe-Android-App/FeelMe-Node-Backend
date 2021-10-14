@@ -56,6 +56,28 @@ export const updateUserProfile = async (req: Request, res: Response) => {
   }
 };
 
+export const saveStreamList = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+  const { streamList } = req.body;
+
+  if (!streamList)
+    return res.status(422).json({ error: "streamList is required" });
+
+  try {
+    const user = await User.findOne({ uid: userUid, deleted: false });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.streaming = streamList;
+
+    const userUpdate = await user.save();
+    return res.status(200).json(userUpdate);
+  } catch (err) {
+    return res.status(500).json({
+      error: "Error, please try again",
+    });
+  }
+};
+
 export const deleteUserProfile = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
 
