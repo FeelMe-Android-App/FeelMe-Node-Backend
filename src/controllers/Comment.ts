@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Comment } from "../models/Comment";
+import { Movie } from "../models/Movie";
 import { User } from "../models/User";
 import { IComment } from "../types/Comment";
 const ObjectId = require("mongoose").Types.ObjectId;
@@ -117,6 +118,25 @@ export const getFriendsComments = async (req: Request, res: Response) => {
     if (!friendsComments || friendsComments.length === 0)
       return res.status(422).json({ error: "No more itens to show" });
     res.status(200).json({ comments: friendsComments });
+  } catch (err) {
+    res.status(404).json({ error: "Error, please try again" });
+  }
+};
+
+export const getFriendsMovies = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+
+  try {
+    const user = await User.findOne({ uid: userUid, deleted: false });
+    if (!user) return res.status(404).json({ error: "User not founded" });
+
+    const lastFriendsMovie = await Movie.find({ uid: { $in: user.follow } })
+      .sort({ updatedAt: -1 })
+      .skip(0)
+      .limit(20);
+    if (!lastFriendsMovie)
+      return res.status(404).json({ error: "No friends activity" });
+    res.status(200).json({ friendsMovies: lastFriendsMovie });
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
   }

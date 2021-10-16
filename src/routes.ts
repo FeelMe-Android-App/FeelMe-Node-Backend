@@ -4,6 +4,7 @@ import {
   deleteUserComment,
   editUserComment,
   getFriendsComments,
+  getFriendsMovies,
   getMovieComments,
   getMyComments,
   getUserComments,
@@ -51,7 +52,7 @@ routes.get("/myprofile/watchedmovies", firebaseAuth, getWatchedMovieList);
 routes.post("/user", firebaseAuth, saveUserProfile);
 routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);
-
+routes.get("/user/friendsMovies", firebaseAuth, getFriendsMovies);
 routes.get("/comment", firebaseAuth, getMyComments);
 routes.get("/comment/:movieId", firebaseAuth, getMovieComments);
 routes.get("/comment/:userId", firebaseAuth, getUserComments);
