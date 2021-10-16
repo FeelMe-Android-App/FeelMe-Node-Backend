@@ -132,6 +132,24 @@ export const getFollowed = async (req: Request, res: Response) => {
   }
 };
 
+export const searchUser = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+  const search = req.params.query;
+
+  if (!search) return res.status(404).json({ error: "search is required" });
+
+  try {
+    const user = await User.findOne({ uid: userUid, deleted: false });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const searchUser = await User.find({ name: { $regex: `.*${search}.*` } });
+    if (!searchUser) return res.status(200).json({ users: [] });
+    return res.status(200).json({ users: searchUser });
+  } catch (err) {
+    return res.status(500).json({ error: "Error, please try again" });
+  }
+};
+
 export const saveUserProfile = async (req: Request, res: Response) => {
   const user: admin.auth.DecodedIdToken = res.locals.user;
   const userData: IUser = {

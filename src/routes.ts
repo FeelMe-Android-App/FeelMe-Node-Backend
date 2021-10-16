@@ -37,6 +37,7 @@ import {
   getFollowed,
   saveUserStreaming,
   saveStreamList,
+  searchUser,
 } from "./controllers/User";
 import firebaseAuth from "./middleware/auth";
 const routes = express.Router();
@@ -49,6 +50,7 @@ routes.get("/myprofile/follow", firebaseAuth, getFollow);
 routes.get("/myprofile/followed", firebaseAuth, getFollowed);
 routes.get("/myprofile/unwatchedmovies", firebaseAuth, getUnwatchedMovieList);
 routes.get("/myprofile/watchedmovies", firebaseAuth, getWatchedMovieList);
+routes.get("/user", firebaseAuth, searchUser);
 routes.post("/user", firebaseAuth, saveUserProfile);
 routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);
