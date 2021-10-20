@@ -134,7 +134,7 @@ export const getFollowed = async (req: Request, res: Response) => {
 
 export const searchUser = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
-  const search = req.params.query;
+  const { search } = req.params.query;
 
   if (!search) return res.status(404).json({ error: "search is required" });
 
