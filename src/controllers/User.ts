@@ -135,6 +135,9 @@ export const getFollowed = async (req: Request, res: Response) => {
 export const searchUser = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
   const search = req.query.query;
+  let page = req.query.page;
+  let pageSkip = page ? parseInt(page.toString()) : 1;
+  pageSkip = (pageSkip - 1) * 20;
 
   if (!search) return res.status(404).json({ error: "search is required" });
 
@@ -144,8 +147,11 @@ export const searchUser = async (req: Request, res: Response) => {
 
     const searchUser = await User.find({
       name: { $regex: `.*${search}.*` },
-    }).select("uid name photoUrl");
-    if (!searchUser) return res.status(200).json({ users: [] });
+    })
+      .select("uid name photoUrl")
+      .skip(pageSkip)
+      .limit(20);
+    if (!searchUser) return res.status(404).json({ error: "No users founded" });
     return res.status(200).json({ users: searchUser });
   } catch (err) {
     return res.status(500).json({ error: "Error, please try again" });
