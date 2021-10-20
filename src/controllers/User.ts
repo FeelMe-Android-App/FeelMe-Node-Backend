@@ -146,7 +146,7 @@ export const searchUser = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const searchUser = await User.find({
-      name: { $regex: `/${search}/i` },
+      name: { $regex: new RegExp(`${search}`, "i") },
     })
       .select("uid name photoUrl")
       .skip(pageSkip)
