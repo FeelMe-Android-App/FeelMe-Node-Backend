@@ -142,7 +142,9 @@ export const searchUser = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    const searchUser = await User.find({ name: { $regex: `.*${search}.*` } });
+    const searchUser = await User.find({
+      name: { $regex: `.*${search}.*` },
+    }).select("uid name photoUrl");
     if (!searchUser) return res.status(200).json({ users: [] });
     return res.status(200).json({ users: searchUser });
   } catch (err) {
