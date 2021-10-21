@@ -38,11 +38,12 @@ import {
   saveUserStreaming,
   saveStreamList,
   searchUser,
+  getMyProfile,
 } from "./controllers/User";
 import firebaseAuth from "./middleware/auth";
 const routes = express.Router();
 
-routes.get("/myprofile", firebaseAuth, getUserProfile);
+routes.get("/myprofile", firebaseAuth, getMyProfile);
 routes.patch("/myprofile", firebaseAuth, updateUserProfile);
 routes.post("/myprofile/streaming", firebaseAuth, saveStreamList);
 routes.delete("/myprofile", firebaseAuth, deleteUserProfile);
@@ -51,6 +52,7 @@ routes.get("/myprofile/followed", firebaseAuth, getFollowed);
 routes.get("/myprofile/unwatchedmovies", firebaseAuth, getUnwatchedMovieList);
 routes.get("/myprofile/watchedmovies", firebaseAuth, getWatchedMovieList);
 routes.get("/user", firebaseAuth, searchUser);
+routes.get("/user/:id", firebaseAuth, getUserProfile);
 routes.post("/user", firebaseAuth, saveUserProfile);
 routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);

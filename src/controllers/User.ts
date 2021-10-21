@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { User } from "../models/User";
 import admin from "firebase-admin";
 import { IUser } from "../types/User";
+import { Movie } from "../models/Movie";
 
-export const getUserProfile = async (req: Request, res: Response) => {
+export const getMyProfile = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
 
   try {
@@ -153,6 +154,45 @@ export const searchUser = async (req: Request, res: Response) => {
       .limit(20);
     if (!searchUser) return res.status(404).json({ error: "No users founded" });
     return res.status(200).json({ users: searchUser });
+  } catch (err) {
+    return res.status(500).json({ error: "Error, please try again" });
+  }
+};
+
+export const getUserProfile = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findOne({ uid: userUid, deleted: false });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const getUserProfile = await User.findOne({ uid: userId, deleted: false });
+    if (!getUserProfile)
+      return res.status(404).json({ error: "User not found" });
+
+    const getUserWatchedMoviesCount = await Movie.find({
+      uid: getUserProfile._id,
+      watched: true,
+    }).count();
+    const getUserUnWatchedMoviesCount = await Movie.find({
+      uid: getUserProfile._id,
+      watched: false,
+    }).count();
+
+    const userProfile = {
+      follow: getUserProfile.follow.length,
+      followed: getUserProfile.followed.length,
+      uid: getUserProfile.uid,
+      name: getUserProfile.name,
+      email: getUserProfile.email,
+      photoUrl: getUserProfile.photoUrl,
+      streaming: getUserProfile.streaming.length,
+      watched: getUserWatchedMoviesCount,
+      unwatched: getUserUnWatchedMoviesCount,
+    };
+
+    return res.status(200).json({ userprofile: userProfile });
   } catch (err) {
     return res.status(500).json({ error: "Error, please try again" });
   }
