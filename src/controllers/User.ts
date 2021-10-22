@@ -213,6 +213,8 @@ export const getUserLastMovies = async (req: Request, res: Response) => {
       uid: userId._id,
       watched: false,
     }).limit(3);
+    if (!lastMovies)
+      return res.status(404).json({ error: "Last Movies not found" });
     return res.status(200).json({ watched: lastMovies });
   } catch (err) {
     res.status(500).json({ error: "Error, please try again" });
