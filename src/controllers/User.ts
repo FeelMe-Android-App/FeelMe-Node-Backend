@@ -181,6 +181,16 @@ export const getUserProfile = async (req: Request, res: Response) => {
       watched: false,
     }).count();
 
+    const getLastWatchedMovies = await Movie.find({
+      uid: getUserProfile._id,
+      watched: true,
+    }).limit(3);
+
+    const getLastComments = await Comment.find({
+      uid: getUserProfile._id,
+      deleted: false,
+    }).limit(10);
+
     const userProfile = {
       follow: getUserProfile.follow.length,
       followed: getUserProfile.followed.length,
@@ -191,6 +201,8 @@ export const getUserProfile = async (req: Request, res: Response) => {
       streaming: getUserProfile.streaming.length,
       watched: getUserWatchedMoviesCount,
       unwatched: getUserUnWatchedMoviesCount,
+      lastwatched: getLastWatchedMovies,
+      lastcomments: getLastComments,
     };
 
     return res.status(200).json({ userprofile: userProfile });
