@@ -40,6 +40,7 @@ import {
   searchUser,
   getMyProfile,
   getUserLastMovies,
+  getUserLastComments,
 } from "./controllers/User";
 import firebaseAuth from "./middleware/auth";
 const routes = express.Router();
@@ -58,6 +59,7 @@ routes.post("/user", firebaseAuth, saveUserProfile);
 routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);
 routes.get("/user/:userId/lastmovies", firebaseAuth, getUserLastMovies);
+routes.get("/user/:userId/lastcomments", firebaseAuth, getUserLastComments);
 routes.get("/user/friendsMovies", firebaseAuth, getFriendsMovies);
 routes.get("/comment", firebaseAuth, getMyComments);
 routes.get("/comment/:movieId", firebaseAuth, getMovieComments);
