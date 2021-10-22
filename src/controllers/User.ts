@@ -198,6 +198,27 @@ export const getUserProfile = async (req: Request, res: Response) => {
   }
 };
 
+export const getUserLastMovies = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+  const { id } = req.params;
+
+  try {
+    const getUser = await User.findOne({ uid: userUid, deleted: false });
+    if (!getUser) return res.status(404).json({ error: "User not found" });
+
+    const userId = await User.findOne({ uid: id, deleted: false });
+    if (!userId) return res.status(404).json({ error: "User not found" });
+
+    const lastMovies = await Movie.find({
+      uid: userId._id,
+      watched: false,
+    }).limit(3);
+    return res.status(200).json({ watched: lastMovies });
+  } catch (err) {
+    res.status(500).json({ error: "Error, please try again" });
+  }
+};
+
 export const saveUserProfile = async (req: Request, res: Response) => {
   const user: admin.auth.DecodedIdToken = res.locals.user;
   const userData: IUser = {
