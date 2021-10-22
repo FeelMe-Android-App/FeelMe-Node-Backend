@@ -57,7 +57,7 @@ routes.get("/user/:id", firebaseAuth, getUserProfile);
 routes.post("/user", firebaseAuth, saveUserProfile);
 routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);
-routes.get("user/:userId/lastmovies", firebaseAuth, getUserLastMovies);
+routes.get("/user/:userId/lastmovies", firebaseAuth, getUserLastMovies);
 routes.get("/user/friendsMovies", firebaseAuth, getFriendsMovies);
 routes.get("/comment", firebaseAuth, getMyComments);
 routes.get("/comment/:movieId", firebaseAuth, getMovieComments);
