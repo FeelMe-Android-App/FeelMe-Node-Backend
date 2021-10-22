@@ -200,7 +200,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
 export const getUserLastMovies = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
-  const { id } = req.params;
+  const id = req.params.userId;
 
   try {
     const getUser = await User.findOne({ uid: userUid, deleted: false });
