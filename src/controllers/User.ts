@@ -236,7 +236,9 @@ export const getUserLastComments = async (req: Request, res: Response) => {
     const lastComments = await Comment.find({
       uid: userId.id,
       deleted: false,
-    }).limit(10);
+    })
+      .populate("uid")
+      .limit(10);
 
     if (!lastComments) return res.status(404).json({ error: "No Comments" });
     return res.status(200).json({ comments: lastComments });
