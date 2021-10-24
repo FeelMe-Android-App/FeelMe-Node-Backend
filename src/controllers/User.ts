@@ -149,6 +149,7 @@ export const searchUser = async (req: Request, res: Response) => {
 
     const searchUser = await User.find({
       name: { $regex: new RegExp(`${search}`, "i") },
+      uid: { $ne: userUid },
     })
       .select("uid name photoUrl")
       .skip(pageSkip)
@@ -191,6 +192,9 @@ export const getUserProfile = async (req: Request, res: Response) => {
       deleted: false,
     }).limit(10);
 
+    const isFollow = user.followed.includes(getUserProfile._id);
+    const isFollowed = user.follow.includes(getUserProfile._id);
+
     const userProfile = {
       follow: getUserProfile.follow.length,
       followed: getUserProfile.followed.length,
@@ -203,6 +207,8 @@ export const getUserProfile = async (req: Request, res: Response) => {
       unwatched: getUserUnWatchedMoviesCount,
       lastwatched: getLastWatchedMovies,
       lastcomments: getLastComments,
+      isfollow: isFollow,
+      isfollowed: isFollowed,
     };
 
     return res.status(200).json({ userprofile: userProfile });
