@@ -192,8 +192,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
       deleted: false,
     }).limit(10);
 
-    const isFollow = user.followed.includes(getUserProfile._id);
-    const isFollowed = user.follow.includes(getUserProfile._id);
+    const isFollowed = user.followed.includes(getUserProfile._id);
 
     const userProfile = {
       follow: getUserProfile.follow.length,
@@ -207,7 +206,6 @@ export const getUserProfile = async (req: Request, res: Response) => {
       unwatched: getUserUnWatchedMoviesCount,
       lastwatched: getLastWatchedMovies,
       lastcomments: getLastComments,
-      isfollow: isFollow,
       isfollowed: isFollowed,
     };
 
