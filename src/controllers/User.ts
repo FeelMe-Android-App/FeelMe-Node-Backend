@@ -325,6 +325,9 @@ export const followUser = async (req: Request, res: Response) => {
     if (!userExists)
       return res.status(404).json({ error: "Follow user not founded" });
 
+    if (userExists.followed.includes(followedExists._id))
+      return res.status(404).json({ error: "User followed" });
+
     //Salva o usuário atual como seguidor no usuário que foi seguido
     await User.updateOne(
       { _id: followedExists._id },
