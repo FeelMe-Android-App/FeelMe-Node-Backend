@@ -4,7 +4,6 @@ import {
   deleteUserComment,
   editUserComment,
   getFriendsComments,
-  getFriendsMovies,
   getMovieComments,
   getMyComments,
   getUserComments,
@@ -16,6 +15,7 @@ import {
   voteFeeling,
 } from "./controllers/Feeling";
 import {
+  getFriendsMovies,
   getUnwatchedMovieList,
   getUserUnWatchedMovieList,
   getUserWatchedMovieList,
@@ -60,7 +60,7 @@ routes.post("/user/:userId/follow", firebaseAuth, followUser);
 routes.post("/user/:userId/unfollow", firebaseAuth, unfollowUser);
 routes.get("/user/:userId/lastmovies", firebaseAuth, getUserLastMovies);
 routes.get("/user/:userId/lastcomments", firebaseAuth, getUserLastComments);
-routes.get("/user/friendsMovies", firebaseAuth, getFriendsMovies);
+routes.get("/friendsMovies", firebaseAuth, getFriendsMovies);
 routes.get("/comment", firebaseAuth, getMyComments);
 routes.get("/comment/:movieId", firebaseAuth, getMovieComments);
 routes.get("/comment/:userId", firebaseAuth, getUserComments);
