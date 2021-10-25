@@ -247,6 +247,8 @@ export const getFriendsMovies = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: userUid });
+    if (user.follow.length === 0)
+      return res.status(422).json({ error: "No friends" });
     const lastFriendsMovie = await Movie.find({ uid: { $in: user.follow } })
       .sort({ updatedAt: -1 })
       .skip(0)
