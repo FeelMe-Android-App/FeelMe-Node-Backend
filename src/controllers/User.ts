@@ -375,30 +375,22 @@ export const unfollowUser = async (req: Request, res: Response) => {
     if (!userExists)
       return res.status(404).json({ error: "Follow user not founded" });
 
-    const updatedFollowedList = followedExists.followed.filter(
-      (user) => user !== userExists._id
-    );
-
-    //Remove o usuário atual dos seguidores no usuário seguido
+    // Remove o usuário atual dos seguidores no usuário seguido
     await User.updateOne(
       { _id: followedExists._id },
       {
-        $unset: {
-          followed: updatedFollowedList,
+        $pull: {
+          followed: userExists._id,
         },
       }
     );
 
-    const updateFollowList = userExists.follow.filter(
-      (user) => user !== followedExists._id
-    );
-
-    //Remove da listagem de seguidos do usuário atual
+    // Remove da listagem de seguidos do usuário atual
     await User.updateOne(
       { _id: userExists._id },
       {
-        $unset: {
-          follow: updateFollowList,
+        $pull: {
+          follow: followedExists._id,
         },
       }
     );
