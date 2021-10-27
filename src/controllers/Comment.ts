@@ -112,6 +112,7 @@ export const getFriendsComments = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const friendsComments = await Comment.find({ uid: { $in: user.follow } })
+      .populate("uid", "uid name photoUrl")
       .sort({ updatedAt: -1 })
       .skip(pageSkip)
       .limit(20);
