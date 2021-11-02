@@ -267,11 +267,13 @@ export const getUserLastComments = async (req: Request, res: Response) => {
 
 export const saveUserProfile = async (req: Request, res: Response) => {
   const user: admin.auth.DecodedIdToken = res.locals.user;
+  const { photoUrl } = req.body;
+
   const userData: IUser = {
     uid: user.uid,
     name: user.name,
     email: user.email ?? "",
-    photoUrl: user.photoUrl ?? "",
+    photoUrl: photoUrl ?? "",
     follow: [],
     followed: [],
     streaming: [],
@@ -287,7 +289,7 @@ export const saveUserProfile = async (req: Request, res: Response) => {
       if (!userExists.deleted) {
         (userExists.name = user.name),
           (userExists.email = user.email),
-          (userExists.photoUrl = user.photoUrl ?? ""),
+          (userExists.photoUrl = photoUrl ?? ""),
           userExists.save();
         return res.status(200).send(userExists);
       }
