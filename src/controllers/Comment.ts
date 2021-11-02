@@ -187,7 +187,10 @@ export const deleteUserComments = async (req: Request, res: Response) => {
     });
     if (!comment) return res.status(404).json({ error: "Comment not founded" });
 
-    comment.forEach((doc) => doc.delete());
+    comment.forEach((doc) => {
+      doc.deleted = true;
+      doc.update();
+    });
     return res.status(204).send();
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
