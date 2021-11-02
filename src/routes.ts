@@ -68,7 +68,7 @@ routes.get("/comment/:userId", firebaseAuth, getUserComments);
 routes.get("/friendscomment", firebaseAuth, getFriendsComments);
 routes.post("/comment/:movieId", firebaseAuth, createComment);
 routes.delete("/comment/:commentId", firebaseAuth, deleteUserComment);
-routes.delete("/comments", firebaseAuth, deleteUserComments);
+routes.post("/comments", firebaseAuth, deleteUserComments);
 routes.put("/comment/:commentId", firebaseAuth, editUserComment);
 
 routes.get(
