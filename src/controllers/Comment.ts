@@ -173,6 +173,27 @@ export const deleteUserComment = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteUserComments = async (req: Request, res: Response) => {
+  const userUid = res.locals.user.uid;
+  const commentsId = req.body;
+
+  try {
+    const user = await User.findOne({ uid: userUid, deleted: false });
+    if (!user) return res.status(404).json({ error: "User not founded" });
+
+    const comment = await Comment.find({
+      uid: userUid,
+      _id: { $in: commentsId },
+    });
+    if (!comment) return res.status(404).json({ error: "Comment not founded" });
+
+    comment.forEach((doc) => doc.delete());
+    return res.status(204).send();
+  } catch (err) {
+    res.status(404).json({ error: "Error, please try again" });
+  }
+};
+
 export const editUserComment = async (req: Request, res: Response) => {
   const userUid = res.locals.user.uid;
   const commentId = req.params.commentId;
