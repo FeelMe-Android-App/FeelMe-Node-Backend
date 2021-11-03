@@ -163,38 +163,16 @@ export const deleteUserComment = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const comment = await Comment.findOne({ uid: userUid, _id: commentId });
+    const comment = await Comment.findOne({
+      _id: ObjectId(commentId),
+      uid: user._id,
+    });
     if (!comment) return res.status(404).json({ error: "Comment not founded" });
 
     comment.delete();
     return res.status(204).send();
   } catch (err) {
     res.status(404).json({ error: "Error, please try again" });
-  }
-};
-
-export const deleteUserComments = async (req: Request, res: Response) => {
-  const userUid = res.locals.user.uid;
-  const commentsId = req.body.commentsId.map((id) => ObjectId(id));
-
-  try {
-    const user = await User.findOne({ uid: userUid, deleted: false });
-    if (!user) return res.status(404).json({ error: "User not founded" });
-
-    const comment = await Comment.find({
-      uid: userUid._id,
-      _id: { $in: [...commentsId] },
-    });
-    if (!comment) return res.status(404).json({ error: "Comment not founded" });
-
-    res.json({ userId: user._id, comment: comment, commentsId: commentsId });
-
-    comment.forEach((doc) => {
-      doc.delete();
-    });
-    return res.status(204).send();
-  } catch (err) {
-    res.status(404).json(err);
   }
 };
 
