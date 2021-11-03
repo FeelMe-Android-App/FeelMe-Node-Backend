@@ -49,8 +49,8 @@ export const getMovieComments = async (req: Request, res: Response) => {
 
     const userFriends =
       !user.follow || user.follow.length === 0
-        ? [...user.follow, user._id]
-        : [user._id];
+        ? [user._id]
+        : [...user.follow, user._id];
 
     const comments = await Comment.find({
       uid: { $in: userFriends },
@@ -186,6 +186,8 @@ export const deleteUserComments = async (req: Request, res: Response) => {
       _id: { $in: [...commentsId] },
     });
     if (!comment) return res.status(404).json({ error: "Comment not founded" });
+
+    res.json({ userId: user._id, comment: comment, commentsId: commentsId });
 
     comment.forEach((doc) => {
       doc.delete();
