@@ -152,11 +152,9 @@ export const createComment = async (req: Request, res: Response) => {
 
     const commentDataCreated = {
       _id: commentResult._id,
-      uid: {
-        uid: userUid,
-        name: user.name,
-        photoUrl: user.photoUrl,
-      },
+      uid: userUid,
+      name: user.name,
+      photoUrl: user.photoUrl,
       comment,
       movieId,
       backdropPath,
