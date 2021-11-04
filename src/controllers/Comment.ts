@@ -149,7 +149,7 @@ export const createComment = async (req: Request, res: Response) => {
     };
 
     const commentResult = await Comment.create(commentData);
-    return res.status(200).json({ comments: commentResult });
+    return res.status(200).json(commentResult);
   } catch (err) {
     res.status(404).json({ error: err });
   }
