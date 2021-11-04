@@ -250,6 +250,7 @@ export const getFriendsMovies = async (req: Request, res: Response) => {
     if (user.follow.length === 0)
       return res.status(422).json({ error: "No friends" });
     const lastFriendsMovie = await Movie.find({ uid: { $in: user.follow } })
+      .populate("uid", "uid name photoUrl")
       .sort({ updatedAt: -1 })
       .skip(0)
       .limit(20);
