@@ -139,7 +139,7 @@ export const createComment = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const commentData = {
-      uid: userUid,
+      uid: user._id,
       comment,
       movieId,
       backdropPath,
