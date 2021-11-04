@@ -151,13 +151,18 @@ export const createComment = async (req: Request, res: Response) => {
     const commentResult = await Comment.create(commentData);
 
     const commentDataCreated = {
-      ...commentData,
       _id: commentResult._id,
       uid: {
         uid: userUid,
         name: user.name,
         photoUrl: user.photoUrl,
       },
+      comment,
+      movieId,
+      backdropPath,
+      createdAt: commentData.createdAt,
+      updatedAt: commentData.updatedAt,
+      deleted: false,
     };
 
     return res.status(200).json(commentDataCreated);
