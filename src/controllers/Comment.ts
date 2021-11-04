@@ -139,11 +139,7 @@ export const createComment = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "User not founded" });
 
     const commentData = {
-      uid: {
-        uid: user.uid,
-        name: user.name,
-        photoUrl: user.photoUrl,
-      },
+      uid: userUid,
       comment,
       movieId,
       backdropPath,
@@ -153,7 +149,18 @@ export const createComment = async (req: Request, res: Response) => {
     };
 
     const commentResult = await Comment.create(commentData);
-    return res.status(200).json(commentResult);
+
+    const commentDataCreated = {
+      ...commentData,
+      _id: commentResult._id,
+      uid: {
+        uid: userUid,
+        name: user.name,
+        photoUrl: user.photoUrl,
+      },
+    };
+
+    return res.status(200).json(commentDataCreated);
   } catch (err) {
     res.status(404).json({ error: err });
   }
