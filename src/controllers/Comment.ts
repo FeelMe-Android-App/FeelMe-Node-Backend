@@ -138,8 +138,12 @@ export const createComment = async (req: Request, res: Response) => {
     const user = await User.findOne({ uid: userUid, deleted: false });
     if (!user) return res.status(404).json({ error: "User not founded" });
 
-    const commentData: IComment = {
-      uid: user._id,
+    const commentData = {
+      uid: {
+        uid: user.uid,
+        name: user.name,
+        photoUrl: user.photoUrl,
+      },
       comment,
       movieId,
       backdropPath,
